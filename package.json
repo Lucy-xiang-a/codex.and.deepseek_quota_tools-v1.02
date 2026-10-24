@@ -1,0 +1,48 @@
+{
+  "name": "codex-quota-widget",
+  "version": "1.0.0",
+  "description": "Windows Codex quota floating widget",
+  "main": "dist/main.js",
+  "type": "commonjs",
+  "scripts": {
+    "build": "tsc && node scripts/copy-renderer.mjs",
+    "dev": "pnpm build && electron .",
+    "test": "vitest run",
+    "package:win": "pnpm build && electron-builder --win dir --x64 && node scripts/zip-release.mjs",
+    "clean": "node scripts/clean.mjs"
+  },
+  "build": {
+    "appId": "com.local.codexquotawidget",
+    "productName": "Codex 额度",
+    "directories": {
+      "output": "release-final"
+    },
+    "asar": true,
+    "files": [
+      "dist/main.js",
+      "dist/preload.js",
+      "dist/main/**/*",
+      "dist/shared/**/*",
+      "dist/renderer/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "assets/tray.svg",
+        "to": "tray.svg"
+      }
+    ],
+    "win": {
+      "target": ["portable"],
+      "artifactName": "Codex-额度-${version}-win-x64.${ext}"
+    }
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^22.15.30",
+    "electron": "^37.2.6",
+    "electron-builder": "^26.0.12",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}
