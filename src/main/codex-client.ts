@@ -204,7 +204,11 @@ export function findCodexCli(): CodexCommand | null {
     join(home, '.npm-global', 'bin'),
     join(home, '.local', 'bin'),
     join(home, 'scoop', 'shims'),
+    join(home, '.codex', 'bin'),
     join(localAppData, 'Programs', 'Codex'),
+    join(localAppData, 'Programs', 'OpenAI', 'Codex'),
+    join(process.env.ProgramFiles ?? 'C:\\Program Files', 'OpenAI', 'Codex'),
+    join(process.env['ProgramFiles(x86)'] ?? 'C:\\Program Files (x86)', 'OpenAI', 'Codex'),
   ];
   for (const root of shimRoots) for (const name of shimNames) add(join(root, name));
 

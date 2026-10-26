@@ -1,4 +1,4 @@
-import type { QuotaSnapshot, QuotaWindow } from '../shared/types';
+import type { DeepSeekBalance, QuotaSnapshot, QuotaWindow } from '../shared/types';
 
 type RawWindow = {
   usedPercent?: number;
@@ -23,9 +23,28 @@ export type AccountResponse = {
   requiresOpenaiAuth?: boolean;
 };
 
+export type DeepSeekBalanceResponse = {
+  is_available?: boolean;
+  balance_infos?: Array<{
+    currency?: string;
+    total_balance?: number | string | null;
+    granted_balance?: number | string | null;
+    topped_up_balance?: number | string | null;
+  }>;
+};
+
 export function clampPercent(value: unknown): number | null {
   if (typeof value !== 'number' || !Number.isFinite(value)) return null;
   return Math.max(0, Math.min(100, Math.round(100 - value)));
+}
+
+export function quotaRingLevel(value: number | null | undefined): 'green' | 'yellow' | 'red' | 'empty' {
+  if (value == null) return 'empty';
+  const pct = Math.max(0, Math.min(100, Math.round(value)));
+  if (pct === 0) return 'empty';
+  if (pct >= 51) return 'green';
+  if (pct >= 11) return 'yellow';
+  return 'red';
 }
 
 export function labelForDuration(minutes: number | null | undefined): string {
@@ -66,6 +85,7 @@ export function mapRateLimitResponse(
     updatedAt: Date.now(),
     source: 'app-server',
     state: 'connected',
+    deepseek: previous?.deepseek ?? null,
   };
 }
 
@@ -84,6 +104,7 @@ export function mergeRateLimitUpdate(previous: QuotaSnapshot, update: RateLimitR
     updatedAt: Date.now(),
     source: 'app-server',
     state: 'connected',
+    deepseek: previous.deepseek ?? null,
     error: undefined,
   };
 }
@@ -107,6 +128,59 @@ export function staleSnapshot(previous: QuotaSnapshot | null, state: QuotaSnapsh
     availableResets: previous?.availableResets ?? null,
     updatedAt: previous?.updatedAt ?? null,
     source: previous ? 'cache' : 'none',
+    state,
+    deepseek: previous?.deepseek ?? null,
+    error,
+  };
+}
+
+function parseBalanceAmount(value: unknown): number | null {
+  if (typeof value === 'number' && Number.isFinite(value)) return value;
+  if (typeof value === 'string' && value.trim() !== '') {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+  return null;
+}
+
+export function parseDeepSeekBalance(response: DeepSeekBalanceResponse): DeepSeekBalance {
+  const info = response.balance_infos?.find((item) => item.currency === 'CNY') ?? response.balance_infos?.[0];
+  const isAvailable = response.is_available === true;
+  if (!isAvailable) {
+    return {
+      isAvailable,
+      currency: info?.currency ?? 'CNY',
+      totalBalance: parseBalanceAmount(info?.total_balance),
+      grantedBalance: parseBalanceAmount(info?.granted_balance),
+      toppedUpBalance: parseBalanceAmount(info?.topped_up_balance),
+      updatedAt: Date.now(),
+      state: 'unavailable',
+      error: 'DeepSeek 余额暂不可用',
+    };
+  }
+  return {
+    isAvailable,
+    currency: info?.currency ?? 'CNY',
+    totalBalance: parseBalanceAmount(info?.total_balance),
+    grantedBalance: parseBalanceAmount(info?.granted_balance),
+    toppedUpBalance: parseBalanceAmount(info?.topped_up_balance),
+    updatedAt: Date.now(),
+    state: 'connected',
+  };
+}
+
+export function staleDeepSeekBalance(
+  previous: DeepSeekBalance | null,
+  state: DeepSeekBalance['state'],
+  error: string,
+): DeepSeekBalance {
+  return {
+    isAvailable: previous?.isAvailable ?? null,
+    currency: previous?.currency ?? 'CNY',
+    totalBalance: previous?.totalBalance ?? null,
+    grantedBalance: previous?.grantedBalance ?? null,
+    toppedUpBalance: previous?.toppedUpBalance ?? null,
+    updatedAt: previous?.updatedAt ?? null,
     state,
     error,
   };

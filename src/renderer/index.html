@@ -9,10 +9,29 @@
   <body>
     <main id="app" class="widget-shell">
       <section id="compact-view" class="compact-view drag-region" aria-label="Codex 额度概览">
-        <div class="brand-mark">C</div>
-        <div class="compact-metrics"><span id="compact-primary">5小时 <strong>--%</strong></span><span id="compact-secondary">1周 <strong>--%</strong></span></div>
+        <div id="compact-codex" class="compact-rings">
+          <div class="compact-ring-item">
+            <div class="quota-ring" aria-label="5小时额度">
+              <svg viewBox="0 0 44 44" aria-hidden="true"><circle class="ring-track" cx="22" cy="22" r="18"></circle><circle id="compact-primary-ring" class="ring-value" cx="22" cy="22" r="18"></circle></svg>
+              <strong id="compact-primary-value">--</strong>
+            </div>
+            <span id="compact-primary-label">5小时</span>
+          </div>
+          <div class="compact-ring-item">
+            <div class="quota-ring" aria-label="1周额度">
+              <svg viewBox="0 0 44 44" aria-hidden="true"><circle class="ring-track" cx="22" cy="22" r="18"></circle><circle id="compact-secondary-ring" class="ring-value" cx="22" cy="22" r="18"></circle></svg>
+              <strong id="compact-secondary-value">--</strong>
+            </div>
+            <span id="compact-secondary-label">1周</span>
+          </div>
+        </div>
+        <div id="compact-deepseek" class="compact-deepseek hidden">
+          <span class="compact-provider-label">DeepSeek</span>
+          <strong id="compact-deepseek-balance">¥ --</strong>
+        </div>
         <span id="compact-status" class="status-dot" title="连接状态"></span>
         <button id="expand-button" class="icon-button no-drag" title="展开详情" aria-label="展开详情">↗</button>
+        <span id="compact-resize-handle" class="compact-resize-handle no-drag" aria-hidden="true"></span>
       </section>
 
       <section id="expanded-view" class="panel-view hidden" aria-label="Codex 额度详情">
@@ -20,27 +39,36 @@
           <div><h1>Codex 额度</h1><p id="account-line">Plus · 剩余用量</p></div>
           <div class="window-actions no-drag">
             <button id="expanded-compact-button" class="icon-button" title="返回迷你条" aria-label="返回迷你条">↙</button>
-            <button id="pin-button" class="icon-button" title="固定窗口" aria-label="固定窗口" aria-pressed="false">⌖</button>
+            <button id="expanded-settings-button" class="icon-button" title="偏好设置" aria-label="偏好设置">⚙</button>
             <button id="minimize-button" class="icon-button" title="最小化到任务栏" aria-label="最小化到任务栏">−</button>
             <button id="close-button" class="icon-button" title="关闭窗口并驻留托盘" aria-label="关闭窗口并驻留托盘">×</button>
           </div>
         </header>
         <div class="quota-content">
-          <article class="quota-card"><div class="quota-row"><strong id="primary-label">5小时</strong><strong id="primary-percent" class="quota-percent">--%</strong></div><div class="progress-track"><div id="primary-progress" class="progress-fill"></div></div><p id="primary-reset" class="muted">等待数据</p></article>
-          <div class="divider"></div>
-          <article class="quota-card"><div class="quota-row"><strong id="secondary-label">1周</strong><strong id="secondary-percent" class="quota-percent">--%</strong></div><div class="progress-track secondary"><div id="secondary-progress" class="progress-fill"></div></div><p id="secondary-reset" class="muted">等待数据</p><p id="reset-count" class="muted">—</p></article>
+          <div id="expanded-codex-content">
+            <article class="quota-card"><div class="quota-row"><strong id="primary-label">5小时</strong><strong id="primary-percent" class="quota-percent">--%</strong></div><div class="progress-track"><div id="primary-progress" class="progress-fill"></div></div><p id="primary-reset" class="muted">等待数据</p></article>
+            <div class="divider"></div>
+            <article class="quota-card"><div class="quota-row"><strong id="secondary-label">1周</strong><strong id="secondary-percent" class="quota-percent">--%</strong></div><div class="progress-track secondary"><div id="secondary-progress" class="progress-fill"></div></div><p id="secondary-reset" class="muted">等待数据</p><p id="reset-count" class="muted">—</p></article>
+          </div>
+          <article id="expanded-deepseek-card" class="deepseek-card hidden"><div class="quota-row"><strong>DeepSeek 余额</strong><strong id="deepseek-balance" class="quota-percent">¥ --</strong></div><p id="deepseek-status" class="muted">等待数据</p></article>
         </div>
-        <footer class="panel-footer"><div class="connection"><span id="footer-status" class="status-dot"></span><span id="updated-line">等待连接</span></div><div><button id="refresh-button" class="icon-button" title="刷新">⟳</button><button id="settings-button" class="icon-button" title="偏好设置">⚙</button></div></footer>
+        <footer class="panel-footer"><div class="connection"><span id="footer-status" class="status-dot"></span><span id="updated-line">等待连接</span></div><div><button id="refresh-button" class="icon-button" title="刷新">⟳</button></div></footer>
       </section>
 
       <section id="settings-view" class="panel-view settings-view hidden" aria-label="偏好设置">
-        <header class="window-header drag-region"><div><h1>偏好设置</h1></div><div class="window-actions no-drag"><button id="settings-compact-button" class="icon-button" title="返回迷你条" aria-label="返回迷你条">↙</button><button id="settings-pin-button" class="icon-button" title="固定窗口" aria-label="固定窗口" aria-pressed="false">⌖</button><button id="settings-minimize-button" class="icon-button" title="最小化到任务栏" aria-label="最小化到任务栏">−</button><button id="settings-close-button" class="icon-button" title="关闭窗口并驻留托盘" aria-label="关闭窗口并驻留托盘">×</button></div></header>
+        <header class="window-header drag-region"><div><h1>偏好设置</h1></div><div class="window-actions no-drag"><button id="settings-compact-button" class="icon-button" title="返回迷你条" aria-label="返回迷你条">↙</button><button id="settings-minimize-button" class="icon-button" title="最小化到任务栏" aria-label="最小化到任务栏">−</button><button id="settings-close-button" class="icon-button" title="关闭窗口并驻留托盘" aria-label="关闭窗口并驻留托盘">×</button></div></header>
         <div id="general-tab" class="settings-tab">
           <label class="setting-row"><span>开机启动</span><input id="startup-toggle" type="checkbox" /></label>
           <label class="setting-row"><span>迷你模式</span><input id="compact-toggle" type="checkbox" /></label>
+          <label class="setting-row"><span>浮于窗口上方</span><input id="pin-toggle" type="checkbox" /></label>
           <label class="setting-row"><span>刷新间隔</span><select id="interval-select"><option value="15">15 秒</option><option value="30">30 秒</option><option value="60">60 秒</option><option value="300">5 分钟</option></select></label>
           <label class="setting-row"><span>外观</span><select id="theme-select"><option value="light">浅色</option><option value="dark">深色</option><option value="system">系统</option></select></label>
-          <label class="setting-row"><span>额度类型</span><select disabled><option>Codex</option></select></label>
+          <label class="setting-row"><span>额度类型</span><select id="quota-source-select"><option value="codex">仅 Codex</option><option value="deepseek">仅 DeepSeek</option><option value="both">两者并排</option></select></label>
+          <div class="deepseek-key-setting">
+            <label for="deepseek-key-input">DeepSeek API Key</label>
+            <div class="deepseek-key-controls"><input id="deepseek-key-input" type="password" autocomplete="off" placeholder="填写后保存到本机" /><button id="deepseek-save-button" class="small-button">保存</button><button id="deepseek-clear-button" class="small-button">清除</button></div>
+            <small id="deepseek-key-status">未设置</small>
+          </div>
           <div class="account-box"><strong id="settings-account">未连接</strong><span>仅读取额度 · 不会把登录信息保存到组件</span></div>
         </div>
         <footer class="settings-footer"><button id="back-button" class="text-button">‹ 返回额度</button><button id="quit-button" class="text-button">退出组件</button></footer>

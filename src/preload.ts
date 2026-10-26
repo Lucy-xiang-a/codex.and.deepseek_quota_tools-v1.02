@@ -10,6 +10,10 @@ const api: WidgetApi = {
   minimize: () => ipcRenderer.invoke('window:minimize'),
   hide: () => ipcRenderer.invoke('window:hide'),
   quit: () => ipcRenderer.invoke('app:quit'),
+  resizeCompact: (width: number, persist = false) => ipcRenderer.invoke('window:resize-compact', width, persist),
+  getDeepSeekKeyStatus: () => ipcRenderer.invoke('deepseek:key:status'),
+  setDeepSeekApiKey: (key: string) => ipcRenderer.invoke('deepseek:key:set', key),
+  clearDeepSeekApiKey: () => ipcRenderer.invoke('deepseek:key:clear'),
   onSnapshot: (callback: (snapshot: QuotaSnapshot) => void) => {
     const listener = (_event: Electron.IpcRendererEvent, snapshot: QuotaSnapshot) => callback(snapshot);
     ipcRenderer.on('quota:update', listener);

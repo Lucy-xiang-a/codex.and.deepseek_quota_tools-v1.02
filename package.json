@@ -5,7 +5,7 @@
   "main": "dist/main.js",
   "type": "commonjs",
   "scripts": {
-    "build": "tsc && node scripts/copy-renderer.mjs",
+    "build": "node scripts/generate-assets.mjs && tsc && node scripts/copy-renderer.mjs",
     "dev": "pnpm build && electron .",
     "test": "vitest run",
     "package:win": "pnpm build && electron-builder --win dir --x64 && node scripts/zip-release.mjs",
@@ -28,12 +28,21 @@
     ],
     "extraResources": [
       {
-        "from": "assets/tray.svg",
-        "to": "tray.svg"
+        "from": "assets/tray.png",
+        "to": "tray.png"
+      },
+      {
+        "from": "assets/tray@2x.png",
+        "to": "tray@2x.png"
+      },
+      {
+        "from": "build/icon.ico",
+        "to": "icon.ico"
       }
     ],
     "win": {
       "target": ["portable"],
+      "icon": "build/icon.ico",
       "artifactName": "Codex-额度-${version}-win-x64.${ext}"
     }
   },

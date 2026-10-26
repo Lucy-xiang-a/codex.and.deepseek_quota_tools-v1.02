@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { formatCountdown, labelForDuration, mapRateLimitResponse, mergeRateLimitUpdate } from '../src/main/data';
+import { mkdtemp, readFile, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { formatCountdown, labelForDuration, mapRateLimitResponse, mergeRateLimitUpdate, parseDeepSeekBalance, quotaRingLevel } from '../src/main/data';
 import { commandForCliPath } from '../src/main/codex-client';
+import { LocalState } from '../src/main/settings';
 
 describe('quota mapping', () => {
   it('maps used percent to remaining percent and labels known windows', () => {
@@ -34,5 +38,40 @@ describe('quota mapping', () => {
     expect(commandForCliPath('C:\\Users\\test\\AppData\\Roaming\\npm\\codex.cmd', exists)).toEqual({ command: 'C:\\Users\\test\\AppData\\Roaming\\npm\\codex.cmd', args: [], shell: true });
     expect(commandForCliPath('C:\\Tools\\codex.ps1', exists)?.command).toBe('powershell.exe');
     expect(commandForCliPath('C:\\missing\\codex.exe', () => false)).toBeNull();
+  });
+
+  it('assigns ring colors at every remaining-percent boundary', () => {
+    expect(quotaRingLevel(null)).toBe('empty');
+    expect(quotaRingLevel(0)).toBe('empty');
+    expect(quotaRingLevel(1)).toBe('red');
+    expect(quotaRingLevel(10)).toBe('red');
+    expect(quotaRingLevel(11)).toBe('yellow');
+    expect(quotaRingLevel(50)).toBe('yellow');
+    expect(quotaRingLevel(51)).toBe('green');
+    expect(quotaRingLevel(100)).toBe('green');
+  });
+
+  it('parses DeepSeek CNY balance fields', () => {
+    const balance = parseDeepSeekBalance({
+      is_available: true,
+      balance_infos: [{ currency: 'CNY', total_balance: '12.50', granted_balance: '2', topped_up_balance: 10.5 }],
+    });
+    expect(balance.state).toBe('connected');
+    expect(balance.currency).toBe('CNY');
+    expect(balance.totalBalance).toBe(12.5);
+    expect(balance.grantedBalance).toBe(2);
+    expect(balance.toppedUpBalance).toBe(10.5);
+  });
+
+  it('migrates compact scale and old pin settings without retaining follow mode', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'codex-quota-test-'));
+    await writeFile(join(directory, 'state.json'), JSON.stringify({ settings: { pinMode: 'follow', compactScale: 2.5 } }), 'utf8');
+    const state = new LocalState(directory);
+    await state.load();
+    expect(state.getSettings().pinMode).toBe('off');
+    expect(state.getSettings().compactScale).toBe(1.75);
+    await state.updateSettings({ compactScale: 0.8 });
+    const saved = JSON.parse(await readFile(join(directory, 'state.json'), 'utf8'));
+    expect(saved.settings.compactScale).toBe(0.8);
   });
 });
