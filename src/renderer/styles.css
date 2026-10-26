@@ -6,9 +6,9 @@ button { color: inherit; }
 .widget-shell { width: 100%; height: 100%; }
 .compact-view, .panel-view { box-sizing: border-box; width: 100%; height: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 15px; box-shadow: var(--shadow); overflow: hidden; }
 .compact-view { --compact-scale: 1; position: relative; display: flex; flex: 0 0 auto; align-items: center; gap: calc(12px * var(--compact-scale)); min-height: 68px; padding: calc(7px * var(--compact-scale)) calc(12px * var(--compact-scale)) calc(7px * var(--compact-scale)) calc(13px * var(--compact-scale)); -webkit-app-region: drag; }
-.compact-provider { display: flex; flex-direction: column; justify-content: center; gap: calc(2px * var(--compact-scale)); min-width: 0; flex: 0 1 auto; }
+.compact-provider { display: flex; flex-direction: column; justify-content: flex-start; gap: calc(2px * var(--compact-scale)); min-width: 0; flex: 0 1 auto; }
 .compact-codex { flex: 1 1 auto; }
-.compact-provider-label { color: var(--muted); font-size: calc(11px * var(--compact-scale)); line-height: 1.15; white-space: nowrap; }
+.compact-provider-label { color: var(--muted); font-size: calc(11px * var(--compact-scale)); line-height: 1.15; min-height: 1.15em; white-space: nowrap; }
 .compact-rings-row { display: flex; align-items: center; gap: calc(10px * var(--compact-scale)); min-width: 0; }
 .compact-ring-item { display: flex; align-items: center; gap: calc(5px * var(--compact-scale)); min-width: 0; }
 .quota-ring { position: relative; width: calc(52px * var(--compact-scale)); height: calc(52px * var(--compact-scale)); flex: 0 0 calc(52px * var(--compact-scale)); }
@@ -39,7 +39,7 @@ p { margin: 0; }
 .icon-button { width: 28px; height: 28px; border: 1px solid transparent; padding: 0; background: transparent; cursor: pointer; border-radius: 8px; font-size: 17px; color: var(--text); opacity: .86; }
 .icon-button:hover { background: rgba(128,128,128,.12); color: var(--text); }
 .icon-button.active { background: rgba(30,158,99,.14); color: var(--accent); }
-.quota-content { flex: 1 1 auto; min-height: 0; max-height: calc(100% - 125px); overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; padding: 19px 20px 0; }
+.quota-content { flex: 1 1 auto; min-height: 0; max-height: calc(100% - 125px); overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; padding: 19px 20px 0; }
 .quota-content::-webkit-scrollbar, .settings-tab::-webkit-scrollbar { width: 9px; }
 .quota-content::-webkit-scrollbar-track, .settings-tab::-webkit-scrollbar-track { background: transparent; }
 .quota-content::-webkit-scrollbar-thumb, .settings-tab::-webkit-scrollbar-thumb { background: var(--muted); border: 3px solid transparent; background-clip: padding-box; border-radius: 9px; }
@@ -56,8 +56,10 @@ p { margin: 0; }
 .deepseek-card .quota-percent { font-size: 20px; }
 .muted { color: var(--muted); font-size: 11px; margin-top: 8px; }
 .divider { height: 1px; background: rgba(128,128,128,.16); margin: 0 0 17px; }
-.panel-footer { height: 53px; flex: 0 0 53px; box-sizing: border-box; border-top: 1px solid rgba(128,128,128,.14); padding: 0 14px 0 20px; display: flex; align-items: center; justify-content: space-between; }
-.connection { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--muted); }
+.panel-footer { position: relative; z-index: 1; height: 53px; flex: 0 0 53px; box-sizing: border-box; border-top: 1px solid rgba(128,128,128,.14); background: var(--bg); padding: 0 14px 0 20px; display: flex; align-items: center; justify-content: space-between; }
+.connection { display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 11px; color: var(--muted); }
+.connection > span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.panel-footer .icon-button { flex: 0 0 28px; }
 .hidden { display: none !important; }
 .tabs { display: flex; gap: 19px; padding: 0 20px; height: 38px; align-items: end; border-bottom: 1px solid rgba(128,128,128,.14); }
 .tab { border: 0; background: transparent; color: var(--muted); padding: 0 0 10px; cursor: pointer; font-size: 12px; }
