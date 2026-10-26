@@ -11,6 +11,15 @@ const expandedView = $('expanded-view');
 const settingsView = $('settings-view');
 const RING_CIRCUMFERENCE = 2 * Math.PI * 18;
 
+function updateCompactScale() {
+  const width = compactView.getBoundingClientRect().width || window.innerWidth || 360;
+  const scale = Math.max(0.55, Math.min(1.75, width / 360));
+  compactView.style.setProperty('--compact-scale', scale.toFixed(3));
+}
+
+if (typeof ResizeObserver !== 'undefined') new ResizeObserver(updateCompactScale).observe(compactView);
+updateCompactScale();
+
 async function showView(view, userInitiated = true) {
   if (userInitiated) viewTouched = true;
   currentView = view;
@@ -99,6 +108,7 @@ function applyQuotaSource() {
   const showCodex = source === 'codex' || source === 'both';
   const showDeepSeek = source === 'deepseek' || source === 'both';
   $('compact-codex').classList.toggle('hidden', !showCodex);
+  $('compact-provider-separator').classList.toggle('hidden', !(showCodex && showDeepSeek));
   $('compact-deepseek').classList.toggle('hidden', !showDeepSeek);
   $('expanded-codex-content').classList.toggle('hidden', !showCodex);
   $('expanded-deepseek-card').classList.toggle('hidden', !showDeepSeek);

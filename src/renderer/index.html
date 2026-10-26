@@ -9,23 +9,27 @@
   <body>
     <main id="app" class="widget-shell">
       <section id="compact-view" class="compact-view drag-region" aria-label="Codex 额度概览">
-        <div id="compact-codex" class="compact-rings">
-          <div class="compact-ring-item">
-            <div class="quota-ring" aria-label="5小时额度">
-              <svg viewBox="0 0 44 44" aria-hidden="true"><circle class="ring-track" cx="22" cy="22" r="18"></circle><circle id="compact-primary-ring" class="ring-value" cx="22" cy="22" r="18"></circle></svg>
-              <strong id="compact-primary-value">--</strong>
+        <div id="compact-codex" class="compact-provider compact-codex">
+          <span class="compact-provider-label">Codex 额度</span>
+          <div class="compact-rings-row">
+            <div class="compact-ring-item">
+              <div class="quota-ring" aria-label="5小时额度">
+                <svg viewBox="0 0 44 44" aria-hidden="true"><circle class="ring-track" cx="22" cy="22" r="18"></circle><circle id="compact-primary-ring" class="ring-value" cx="22" cy="22" r="18"></circle></svg>
+                <strong id="compact-primary-value">--</strong>
+              </div>
+              <span id="compact-primary-label">5小时</span>
             </div>
-            <span id="compact-primary-label">5小时</span>
-          </div>
-          <div class="compact-ring-item">
-            <div class="quota-ring" aria-label="1周额度">
-              <svg viewBox="0 0 44 44" aria-hidden="true"><circle class="ring-track" cx="22" cy="22" r="18"></circle><circle id="compact-secondary-ring" class="ring-value" cx="22" cy="22" r="18"></circle></svg>
-              <strong id="compact-secondary-value">--</strong>
+            <div class="compact-ring-item">
+              <div class="quota-ring" aria-label="1周额度">
+                <svg viewBox="0 0 44 44" aria-hidden="true"><circle class="ring-track" cx="22" cy="22" r="18"></circle><circle id="compact-secondary-ring" class="ring-value" cx="22" cy="22" r="18"></circle></svg>
+                <strong id="compact-secondary-value">--</strong>
+              </div>
+              <span id="compact-secondary-label">1周</span>
             </div>
-            <span id="compact-secondary-label">1周</span>
           </div>
         </div>
-        <div id="compact-deepseek" class="compact-deepseek hidden">
+        <span id="compact-provider-separator" class="compact-provider-separator hidden" aria-hidden="true"></span>
+        <div id="compact-deepseek" class="compact-provider compact-deepseek hidden">
           <span class="compact-provider-label">DeepSeek</span>
           <strong id="compact-deepseek-balance">¥ --</strong>
         </div>
