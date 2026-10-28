@@ -10,7 +10,7 @@
 
 ## 下载与直接运行
 
-普通 GitHub 源码页面不会显示 `release-final/`，因为它是本地打包输出目录，并且已加入 `.gitignore`。最终用户不需要安装 Node.js 或 pnpm，直接到 [Releases](https://github.com/Lucy-xiang-a/codex_quota_tools-v1.0/releases) 下载 Windows x64 便携 ZIP，解压后运行其中的 `Codex 额度.exe` 即可。
+普通 GitHub 源码页面不会显示 `release-final/`，因为它是本地打包输出目录，并且已加入 `.gitignore`。最终用户不需要安装 Node.js 或 pnpm，直接到 [Releases](https://github.com/Lucy-xiang-a/codex.and.deepseek_quota_tools-v1.02/releases) 下载 Windows x64 便携 ZIP，解压后运行其中的 `Codex 额度.exe` 即可。
 
 便携版不需要管理员权限。设置和最近一次额度快照会保存到当前 Windows 用户的 Electron `userData` 目录；DeepSeek API Key 只在用户在设置页保存后写入本机状态文件。
 
