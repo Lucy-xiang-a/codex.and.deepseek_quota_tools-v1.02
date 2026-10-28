@@ -6,7 +6,6 @@
 
 ![迷你条：Codex 双圆环与 DeepSeek 余额](docs/screenshots/compact-both.png)
 
-![深色主题额度详情页](docs/screenshots/expanded-dark.png)
 
 ## 下载与直接运行
 
